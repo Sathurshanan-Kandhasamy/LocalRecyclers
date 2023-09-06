@@ -6,20 +6,25 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 
-//Our main class which inherits(extends) from the JFrame class. By doing this our class gets access to all the pre-written
-//code and functionality of the JFrame class (such as adding components and drawing itself on screen) without the need to rewrite the
-//code that achieves this. This class is just considered as already having the code that is in the JFrame class as part of its own
-//code and logic.
+/**
+ * Main class which inherits(extends) from the JFrame class. By doing this MainForm class gets access to all the pre-written
+ * code and functionality of the JFrame class (such as adding components and drawing itself on screen) without the need to rewrite the
+ * code that achieves this. This class is just considered as already having the code that is in the JFrame class as part of its own
+ * code and logic.
+ */
 public class MainForm extends JFrame implements ActionListener
 {
-    //Create a new file manager class for reading and writing to the data file.
+
+    // Create a new file manager class for reading and writing to the data file.
     FileManager file = new FileManager();
 
-    //Creating the class object we will use for laying out our components on screen.
+    // Creating the class object we will use for laying out components on screen.
     SpringLayout layout = new SpringLayout();
 
-    //Declare the components that we will be using in the form. Each one is named using a prefix to help
-    //identify its type when you see it later in the code.
+    /**
+     * Declare the components that we will be using in the form. Each one is named using a prefix to help
+     * identify its type when you see it later in the code.
+     */
     JLabel lblHeader;
     JLabel lblBusinessName,lblAddress,lblPhone, lblWebsite, lblRecycles;
     JTextField txtBusinessName,txtAddress,txtPhone, txtWebsite, txtRecycles;
@@ -33,32 +38,42 @@ public class MainForm extends JFrame implements ActionListener
     JTextField txtFind;
     JButton btnExit;
 
+    // Declare an array which can store up to a hundred Recycler objects.
     Recycler[] recyclers = new Recycler[100];
-    //Keeps track of how many entries are currently filled out in the array.
+    // Keeps track of how many entries are currently filled out in the array.
     int numberOfRecyclers = 0;
-    //Tracks the current index in the array that we are viewing/interacting with.
+    // Tracks the current index in the array that we are viewing/interacting with.
     int CurrentRecycler = 0;
-    //Tracks whether the next time the save button is pressed, whether it saves the object as a new entry or an edited entry.
+    /**
+     *  Tracks whether the next time the save button is pressed, whether it saves the object as a new entry
+     *  or an edited entry.
+     */
     boolean isNewEntry = true;
 
+    // MainForm constructor.
     public MainForm()
     {
-        //Triggers the set size command that is inherited from JFrame to set the size values of the form.
+        // Triggers the set size command that is inherited from JFrame to set the size values of the form.
         setSize(720,520);
-        //Triggers the set location command that is inherited from JFrame to set the starting location values of the form.
-        //These are calculated from the top left corner of the form
+        /**
+         * Triggers the set location command that is inherited from JFrame to set the starting location values of the form.
+         * These are calculated from the top left corner of the form
+         */
         setLocation(400,200);
-        //Telling the form to use the layout system we give it when positioning components.
+        // Telling the form to use the layout system we give it when positioning components.
         setLayout(layout);
-
-        //Gets the content pane component(The part that holds the content and style settings) of the JFrame and
-        //sets its background value.
+        /**
+         * Gets the content pane component(The part that holds the content and style settings) of the JFrame and
+         * sets its background value.
+         */
         getContentPane().setBackground(Color.WHITE);
 
-        //Adds a window listener object to the Frame to respond to window events such as the window opening, closing etc.
-        //The Window adapter that is passed into this method is a separate class object which holds the logic to be
-        //executed when the triggered event occurs. In this example the event being setup is the window closing event
-        //which runs the code to shut down the application.
+        /**
+         * Adds a window listener object to the Frame to respond to window events such as the window opening, closing etc.
+         * The Window adapter that is passed into this method is a separate class object which holds the logic to be
+         * executed when the triggered event occurs. In this example the event being setup is the window closing event
+         * which runs the code to shut down the application.
+         */
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -66,46 +81,54 @@ public class MainForm extends JFrame implements ActionListener
             }
         });
 
+        // Invokes method that renders header part of the GUI.
         BuildHeader();
-
+        // Invokes method that renders form fields and find (by business name) field/button.
         BuildForm();
-
+        // Invokes method that renders new, save, and delete buttons.
         BuildNewSaveDeleteButtons();
-
+        // Invokes method that renders navigation buttons such as first, last, previous, and next.
         BuildNavigationButtons();
-
+        // Invokes method that renders sort, binary search, and filter buttons/input field.
         BuildSortAndSearchComponents();
-
+        // Invokes method that renders textarea and exit button.
         BuildOutputWindowSection();
 
-        //Reads the data from the file and stores it in the recyclers array.
+        // Reads the data from the file and stores it in the recyclers array.
         recyclers = file.ReadDataFromFile();
-        //Checks how many entries wer in the recently inputted file.
+        // Checks how many entries wer in the recently inputted file.
         UpdateNumberOfRecyclers();
 
-        //Checks if there is currently any entries in the array
+        // Checks if there is currently any entries in the array.
         if (numberOfRecyclers > 0)
         {
-            //If so, set the current entry value to the last index
+            // If so, set the current entry value to the last index.
             CurrentRecycler = numberOfRecyclers - 1;
-            //Show the current entry on screen, we only want this to run from inside this if statement, or it will potentially crash
+            /**
+             * Show the current entry on screen, we only want this to run from inside this if statement, or
+             * it will potentially crash.
+             */
             displayCurrentRecycler();
-            //Set the save type to edit if there is data already.
+            // Set the save type to edit if there is data already.
             isNewEntry = false;
         }
 
-        //Calls the method from the JFrame class that turns the frame on and makes it draw onto the screen. This method needs to be
-        //done after all UI setup is completed otherwise odd errors can occur such as missing components of components drawing in the
-        //wrong place etc.
+        /**
+         * Calls the method from the JFrame class that turns the frame on and makes it draw onto the screen.
+         * This method needs to be done after all UI setup is completed otherwise odd errors can occur such as
+         * missing components of components drawing in the wrong place etc.
+         */
         setVisible(true);
     }
 
-    // Build header
+    //
     private void BuildHeader() {
-        //Uses the UIBuilder library to build a label based upon the top left corner
+        //Uses the UIBuilder library to build a label based upon the top left corner.
         lblHeader = UIBuilderLibrary.BuildJLabelWithNorthWestAnchor("Local Recyclers",0,0,layout,this);
-        //Sets the preferred size for the button. This will conform to this specified size unless something
-        //requires it to modify in which case it will resize slightly to meet any anchoring/positioning requirements
+        /**
+         * Sets the preferred size for the button. This will conform to this specified size unless something
+         * requires it to modify in which case it will resize slightly to meet any anchoring/positioning requirements.
+         */
         lblHeader.setPreferredSize(new Dimension(708,30));
         //Sets the text to be centred in the label
         lblHeader.setHorizontalAlignment(JLabel.CENTER);
@@ -121,7 +144,7 @@ public class MainForm extends JFrame implements ActionListener
         add(lblHeader);
     }
 
-    // Build form
+    // Method for rendering form fields and find (by business name) field/button.
     private void BuildForm() {
         //Uses the UIBuilder library to build a label based upon the top left corner then add it to the frame
         lblBusinessName = UIBuilderLibrary.BuildJLabelWithNorthWestAnchor("Business Name:",20,50,layout,this);
