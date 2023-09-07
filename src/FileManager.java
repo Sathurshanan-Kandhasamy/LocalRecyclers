@@ -76,9 +76,7 @@ public class FileManager
             {
                 //Take the recently read line and split it using the semicolons as the delimiter
                 String[] temp = line.split(";");
-                for (int i = 1; i < temp.length; i++) {
-                    System.out.println(temp[i]);
-                }
+
                 //At the index indicated by the counter value, create a new birthday entry and pass the split sections of
                 //the line into the constructor to pre-populate the entry
                 data[counter] = new Recycler(temp[0],temp[1],temp[2], temp[3], temp[4]);
