@@ -3,10 +3,18 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+/**
+ * Class for managing file read and write.
+ */
 public class FileManager
 {
+    // Stores the name of the file to read from and write to.
     String fileName = "LocalRecyclers.csv";
 
+    /**
+     * Method for creating, updating, and deleting a recycler in LocalRecyclers.csv file.
+     * @param data An array of Recycler objects.
+     */
     public void WriteDataToFile(Recycler[] data)
     {
         //All read/write operations in Java need to be contained within a try/catch structure because they
@@ -38,6 +46,10 @@ public class FileManager
         }
     }
 
+    /**
+     * Method for reading recyclers information from LocalRecyclers.csv file.
+     * @return An array of Recycler objects or null.
+     */
     public Recycler[] ReadDataFromFile()
     {
         //All read/write operations in Java need to be contained within a try/catch structure because they

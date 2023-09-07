@@ -121,7 +121,7 @@ public class MainForm extends JFrame implements ActionListener
         setVisible(true);
     }
 
-    //
+    // Method for rendering header section of the GUI.
     private void BuildHeader() {
         //Uses the UIBuilder library to build a label based upon the top left corner.
         lblHeader = UIBuilderLibrary.BuildJLabelWithNorthWestAnchor("Local Recyclers",0,0,layout,this);
@@ -159,13 +159,11 @@ public class MainForm extends JFrame implements ActionListener
         add(lblWebsite);
         lblRecycles = UIBuilderLibrary.BuildJLabelInlineBelow("Recycles:",10,layout,lblWebsite);
         add(lblRecycles);
-        //Uses the UIBuilder library to build a label directly to the right of the specified component then add it to the frame
+        //Uses the UIBuilder library to build a text-field directly to the right of the specified component then add it to the frame.
         txtBusinessName = UIBuilderLibrary.BuildJTextFieldInlineToRight(20,35,layout,lblBusinessName);
         add(txtBusinessName);
-        //Uses the UIBuilder library to build a label directly below the specified component then add it to the frame
         txtAddress = UIBuilderLibrary.BuildJTextFieldInlineBelow(20,5,layout,txtBusinessName);
         add(txtAddress);
-        //Uses the UIBuilder library to build a label directly below the specified component then add it to the frame
         txtPhone = UIBuilderLibrary.BuildJTextFieldInlineBelow(20,5,layout,txtAddress);
         add(txtPhone);
         txtWebsite = UIBuilderLibrary.BuildJTextFieldInlineBelow(20,5,layout,txtPhone);
@@ -179,7 +177,7 @@ public class MainForm extends JFrame implements ActionListener
         add(txtFind);
     }
 
-    // Build new, save, and delete buttons
+    // Method for rendering build new, save, and delete buttons.
     private void BuildNewSaveDeleteButtons() {
         //Set up our buttons on a group with the first button anchored based upon the form and the other buttons each anchored below each other.
         btnNew = UIBuilderLibrary.BuildJButtonWithNorthWestAnchor(85,25,"New",500,50,this,layout,this);
@@ -190,7 +188,7 @@ public class MainForm extends JFrame implements ActionListener
         add(btnDelete);
     }
 
-    // Build navigation buttons
+    // Method for rendering navigation buttons.
     private void BuildNavigationButtons() {
         //Set up our navigation buttons in a group with each button except the first anchored to the right of the previous button.
         btnFirst = UIBuilderLibrary.BuildJButtonWithNorthWestAnchor(35,25,"|<",500,180,this,layout,this);
@@ -210,7 +208,7 @@ public class MainForm extends JFrame implements ActionListener
         add(btnLast);
     }
 
-    // Build button sort and search components
+    // Method for rendering sort, binary search, and filter components.
     private void BuildSortAndSearchComponents() {
         btnSort = UIBuilderLibrary.BuildJButtonWithNorthWestAnchor(170,25,"Sort by Business Name",20,220,this,layout,this);
         add(btnSort);
@@ -225,7 +223,7 @@ public class MainForm extends JFrame implements ActionListener
         add(txtFilter);
     }
 
-    // Build output window section
+    // Method for rendering output window section.
     private void BuildOutputWindowSection() {
         //Create a new text area, but don't define it's size. It will be sized and positioned according to the scroll pane once added to it.
         txtOutput = new JTextArea();
@@ -279,7 +277,7 @@ public class MainForm extends JFrame implements ActionListener
         }
     }
 
-    //Displays the array element matching the index of the current entry variable on screen.
+    // Displays the array element matching the index of the current entry variable on screen.
     private void displayCurrentRecycler()
     {
         //If this method was called when there is no data
@@ -300,7 +298,7 @@ public class MainForm extends JFrame implements ActionListener
         txtRecycles.setText(recyclers[CurrentRecycler].getRecycles());
     }
 
-    // Clear entry fields
+    // Clears all the form input fields.
     private void ClearEntryFields()
     {
         txtBusinessName.setText("");
@@ -317,22 +315,29 @@ public class MainForm extends JFrame implements ActionListener
         //Checks which component triggered the event by getting the source value from the ActionEvent data.
         //If the source matches the specified component in any of the if statements below, that statement runs.
 
+        // If new and save buttons are not clicked.
         if (e.getSource() != btnNew && e.getSource() != btnSave)
         {
+            // set isNewEntry to false.
             isNewEntry = false;
         }
 
+        // If new button clicked.
         if (e.getSource() == btnNew)
         {
+            // Clear form input fields and set isNewEntry to true.
             ClearEntryFields();
             isNewEntry = true;
         }
 
+        // If save button is clicked.
         if (e.getSource() == btnSave)
         {
-            SaveBirthdayEntry();
+            // Invoke SaveRecycler method.
+            SaveRecycler();
         }
 
+        // If delete button is clicked.
         if(e.getSource() == btnDelete)
         {
             //If there are no entries in the array. Return out of the method.
@@ -340,15 +345,17 @@ public class MainForm extends JFrame implements ActionListener
             {
                 return;
             }
-            DeleteSelectedEntry();
+            DeleteRecycler();
         }
 
+        // If first button is clicked.
         if (e.getSource() == btnFirst)
         {
             //Set the CurrentRecycler to the first array index and then display it on screen.
             CurrentRecycler = 0;
             displayCurrentRecycler();
         }
+        // If previous button is clicked.
         if (e.getSource() == btnPrev)
         {
             //Check that we are not already on the first index
@@ -359,6 +366,7 @@ public class MainForm extends JFrame implements ActionListener
                 displayCurrentRecycler();
             }
         }
+        // If next button is clicked.
         if (e.getSource() == btnNext)
         {
             //Check that we are not already on the last index with data
@@ -369,6 +377,7 @@ public class MainForm extends JFrame implements ActionListener
                 displayCurrentRecycler();
             }
         }
+        // If last button is clicked.
         if (e.getSource() == btnLast)
         {
             //Set the CurrentRecycler to the last array index with data and then display it on screen
@@ -376,11 +385,13 @@ public class MainForm extends JFrame implements ActionListener
             displayCurrentRecycler();
         }
 
+        // If sort and binary search buttons are clicked.
         if (e.getSource() == btnSort || e.getSource() == btnBinary)
         {
             SortAndBinarySearchEntries(e);
         }
 
+        // If filter button is clicked.
         if(e.getSource() == btnFilter)
         {
             //Set the text of the text area to a default starting line
@@ -399,6 +410,7 @@ public class MainForm extends JFrame implements ActionListener
             }
         }
 
+        // If find button is clicked.
         if (e.getSource() == btnFind)
         {
             //Cycle through all the birthday entries with data
@@ -417,12 +429,14 @@ public class MainForm extends JFrame implements ActionListener
             }
         }
 
+        // If exit button is clicked.
         if(e.getSource() == btnExit)
         {
             System.exit(0);
         }
     }
 
+    // Method for performing binary search.
     private void SortAndBinarySearchEntries(ActionEvent e) {
         //Create an empty array that has a size equal to the number of entries in the birthday data array
         Recycler[] sortedArray = new Recycler[numberOfRecyclers];
@@ -459,7 +473,8 @@ public class MainForm extends JFrame implements ActionListener
         }
     }
 
-    private void DeleteSelectedEntry() {
+    // Method for deleting an existing recycler.
+    private void DeleteRecycler() {
         //Cycle through the data array starting at the current entry(the one being removed), until the last entry with data.
         for (int i = CurrentRecycler; i < numberOfRecyclers; i++)
         {
@@ -487,7 +502,8 @@ public class MainForm extends JFrame implements ActionListener
         file.WriteDataToFile(recyclers);
     }
 
-    private void SaveBirthdayEntry() {
+    // Method for creating a new recycler.
+    private void SaveRecycler() {
         //Create a new empty birthday data object
         Recycler data = new Recycler();
         //For each property of the object, call the associated setter method and pass it the text content of the

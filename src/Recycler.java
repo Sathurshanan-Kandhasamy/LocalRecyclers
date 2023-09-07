@@ -1,6 +1,6 @@
 /**
- * Data Model to represent a single set of Birthday data about an individual person. Each time we need to create a set of details about a
- * person we will create on of these objects and populate it with data.
+ * Data Model to represent a single Local Recycler. Each time we need to create a set of details about a
+ * recycler we will create on of these objects and populate it with data.
  */
 public class Recycler implements Comparable
 {
@@ -15,15 +15,15 @@ public class Recycler implements Comparable
 
     //A blank constructor which allows us to create an instance of this object which is blank and has no
     //pre-filled values.
-    //IMPLEMENTATION EXAMPLE: BirthdayData myData = new BirthdayData();
+    //IMPLEMENTATION EXAMPLE: Recycler recyclers = new Recycler();
     public Recycler()
     {
 
     }
 
-    //Constructor variation that takes 3 parameters upon creation. These parameters are then passed to the variables in the
-    //object to pre-fill its details upon creation. This variation will only work if 3 string variables are provided.
-    //IMPLEMENTATION EXAMPLE: BirthdayData myData = new BirthdayData("Troy","12/12/2004", "Beer, Games");
+    //Constructor variation that takes 5 parameters upon creation. These parameters are then passed to the variables in the
+    //object to pre-fill its details upon creation. This variation will only work if 5 string variables are provided.
+    //IMPLEMENTATION EXAMPLE: Recycler recyclers = new Recycler("Business Name", "Address", "Phone", "Website", "Recycles");
     public Recycler(String businessName, String address, String phone, String website, String recycles)
     {
         this.businessName = businessName;
@@ -98,13 +98,13 @@ public class Recycler implements Comparable
         {
             //Converts the object into a string type and stores it as a variable
             String otherString = (String)other;
-            //Tells the method to return the result of running the standard string comparison using the name fields of this object as the
+            //Tells the method to return the result of running the standard string comparison using the businessName fields of this object as the
             //strings being compared and the provided string as the other value.
             return businessName.compareToIgnoreCase(otherString);
         }
 
         Recycler otherData = (Recycler)other;
-        //Tells the method to return the result of running the standard string comparison using the name fields of each object as the
+        //Tells the method to return the result of running the standard string comparison using the businessName fields of each object as the
         //strings being compared.
         return businessName.compareToIgnoreCase(otherData.getBusinessName());
     }
